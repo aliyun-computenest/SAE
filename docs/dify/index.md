@@ -13,17 +13,17 @@ Dify.AI 是一款 LLMOps 平台，帮助开发者更简单、更快速地构建 
 部署 Dify 社区版服务实例，需要对部分阿里云资源进行访问和创建操作。因此您的账号需要包含如下资源的权限。
 **说明**：当您的账号是RAM账号时，才需要添加此权限。
 
-| 权限策略名称                          | 备注                               |
-|---------------------------------|----------------------------------|
-| AliyunSAEFullAccess             | 管理 Serverless 应用引擎（SAE）的权限       |
-| AliyunVPCFullAccess             | 管理专有网络（VPC）的权限                   |
-| AliyunSLBFullAccess             | 管理负载均衡服务（SLB）的权限                 |
-| AliyunROSFullAccess             | 管理资源编排服务（ROS）的权限                 |
-| AliyunKvstoreFullAccess         | 管理云数据库 Tair（兼容 Redis）的权限         |
-| AliyunRDSFullAccess             | 管理云数据库服务（RDS）的权限                 |
-| AliyunGPDBFullAccess            | 管理 AnalyticDB for PostgreSQL 的权限 |
-| AliyunNASFullAccess            | 管理文件存储服务（NAS）的权限                 |
-| AliyunComputeNestUserFullAccess | 管理计算巢服务（ComputeNest）的用户侧权限       |
+| 权限策略名称                          | 备注                         |
+|---------------------------------|----------------------------|
+| AliyunSAEFullAccess             | 管理 Serverless 应用引擎（SAE）的权限 |
+| AliyunVPCFullAccess             | 管理专有网络（VPC）的权限             |
+| AliyunSLBFullAccess             | 管理负载均衡服务（SLB）的权限           |
+| AliyunROSFullAccess             | 管理资源编排服务（ROS）的权限           |
+| AliyunKvstoreFullAccess         | 管理云数据库 Tair（兼容 Redis）的权限   |
+| AliyunRDSFullAccess             | 管理云数据库服务（RDS）的权限           |
+| AliyunOTSFullAccess            | 管理表格存储服务（OTS）的权限    |
+| AliyunNASFullAccess            | 管理文件存储服务（NAS）的权限           |
+| AliyunComputeNestUserFullAccess | 管理计算巢服务（ComputeNest）的用户侧权限 |
 
 
 ## 计费说明
@@ -35,15 +35,13 @@ Dify 高可用版在计算巢部署的费用主要涉及：
 - 可观测写入数据量（可选）
 
 ## 部署架构
-![image.png](https://img.alicdn.com/imgextra/i1/O1CN01skRMOT1LgjRRQhXdw_!!6000000001329-2-tps-1908-1430.png)
-
 本方案的技术架构包括以下基础设施和云服务：
 - 1个专有网络 VPC：为 SAE 应用、云数据库等云资源构建云上私有网络。
 - 2个交换机：将 SAE 应用、云数据库等资源连接在同一网络上，实现它们之间的通信，并提供基本的网络分段和隔离功能。
 - 1个安全组：用于限制专有网络 VPC 下的网络出入规则。
 - 1个负载均衡 CLB：为 Dify 提供负载均衡服务，将流量分发到不同的后端服务器来扩展应用系统的服务吞吐能力。
 - 1个云数据库 Tair（兼容 Redis）：为 Dify 提供缓存服务。
-- 1个云原生数据仓库 AnalyticDB PostgreSQL版：为 Dify 提供向量检索服务。
+- 1个表格存储服务（OTS）实例：为 Dify 提供向量检索服务。
 - 1个云数据库 RDS PostgreSQL版：为 Dify 提供关系型数据库服务。
 - 1个文件存储 NAS：用于 Dify 应用文件存储。
 - 1个 NAT 网关：用于 Dify 应用访问公网服务。
@@ -60,7 +58,7 @@ Dify 高可用版在计算巢部署的费用主要涉及：
    配置Reids数据库
    ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01zbF45n1aBmv0PAV69_!!6000000003292-2-tps-2688-398.png)
    配置向量数据库
-   ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01UR5fHl1V0Gsg16wsD_!!6000000002590-2-tps-2776-684.png)
+   ![image.png](https://img.alicdn.com/imgextra/i1/O1CN01Bq3pTW1Qe3D49rXWb_!!6000000002000-2-tps-1926-426.png)
    配置网络参数，可以选择新建 VPC, 也可以选择已有 VPC，推荐双可用区部署，提高服务可用性。
    ![image.png](https://img.alicdn.com/imgextra/i2/O1CN01XCIhHM1HV2s9L4ISM_!!6000000000762-2-tps-2722-1080.png)
    若选择已有 VPC，且该 VPC 未配置 NAT 网关，需要新建 NAT 网关以支持实例公网访问。
