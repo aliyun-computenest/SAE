@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="计算巢是阿里云开放给企业应用服务商的服务管理平台。服务商能够在计算巢上发布私有化部署服务，为其客户提供云上软件一键部署的能力；同时也支持全托管模式的服务，赋能服务商托管其客户资源。">
+  <title>RAGFlow 高可用版 Serverless 部署 - Aliyun 计算巢 x Demo</title>
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  
+
+  
+
+  
+  
+
+  
+    <script src="../search/main.js"></script>
+  
+
+  
+
+  <script src="../js/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="nav-inner">
+        <div class="logo">
+          <img src="./img/logo-2x.png">
+        </div>
+        <div class="nav-list">
+          <ul>
+          
+              <li><a href="#ragflow-serverless">RAGFlow 高可用版 Serverless 部署</a></li>
+              
+                  <li><a href="#_1">概述</a></li>
+                  
+              
+                  <li><a href="#_2">计费说明</a></li>
+                  
+              
+                  <li><a href="#ram">RAM账号所需权限</a></li>
+                  
+              
+                  <li><a href="#_3">部署流程</a></li>
+                  
+              
+                  <li><a href="#_4">常见问题</a></li>
+                  
+              
+          
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="content theme-github">
+      
+      <div class="content-inner">        
+        
+        <h1 id="ragflow-serverless">RAGFlow 高可用版 Serverless 部署</h1>
+<h2 id="_1">概述</h2>
+<p>RAGFlow是一个基于深度文档理解的开源RAG（检索增强生成）引擎。当与LLM集成时，它能够提供真实的问答功能，并得到各种复杂格式数据的充分引用的支持。 详情请查看<a href="https://ragflow.io">RAGFlow官网</a>。
+本方案提供了快速部署 RAGFlow 高可用版的最佳实践，基于阿里云 Serverless 应用引擎（SAE）部署的 RAGFlow 支持高可用、自动弹性、免运维等能力，集成了阿里云对象存储、MySQL/Redis 数据库、Elasticsearch 服务，可以实现 RAGFlow 稳定、高性能部署，推荐用于生产环境。</p>
+<h2 id="_2">计费说明</h2>
+<p>RAGFlow 高可用版的费用主要涉及：</p>
+<ul>
+<li>选vCPU与内存规格</li>
+<li>OSS 实际使用量</li>
+<li>MySQL/Redis 数据库规格</li>
+<li>Elasticsearch 实例规格</li>
+</ul>
+<h2 id="ram">RAM账号所需权限</h2>
+<p>部署RAGFlow 测试版，需要对部分阿里云资源进行访问和创建操作。因此您的账号需要包含如下资源的权限。
+  <strong>说明</strong>：当您的账号是RAM账号时，才需要添加此权限。</p>
+<table>
+<thead>
+<tr>
+<th>权限策略名称</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AliyunSAEFullAccess</td>
+<td>管理 Serverless 应用引擎（SAE）的权限</td>
+</tr>
+<tr>
+<td>AliyunVPCFullAccess</td>
+<td>管理专有网络（VPC）的权限</td>
+</tr>
+<tr>
+<td>AliyunROSFullAccess</td>
+<td>管理资源编排服务（ROS）的权限</td>
+</tr>
+<tr>
+<td>AliyunComputeNestUserFullAccess</td>
+<td>管理计算巢服务（ComputeNest）的用户侧权限</td>
+</tr>
+<tr>
+<td>AliyunOSSFullAccess</td>
+<td>管理对象存储（OSS）的权限</td>
+</tr>
+<tr>
+<td>AliyunElasticsearchFullAccess</td>
+<td>管理 Elasticsearch 的权限</td>
+</tr>
+<tr>
+<td>AliyunKvstoreFullAccess</td>
+<td>管理云数据库 Tair（兼容 Redis）的权限</td>
+</tr>
+<tr>
+<td>AliyunRDSFullAccess</td>
+<td>管理云数据库服务（RDS）的权限</td>
+</tr>
+<tr>
+<td>AliyunSLBFullAccess</td>
+<td>管理负载均衡服务（SLB）的权限</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_3">部署流程</h2>
+<ol>
+<li>
+<p>进入部署页面，选择模板，按提示填写部署参数：
+  <img alt="image.png" src="https://img.alicdn.com/imgextra/i2/O1CN01GxFN5y22Jr9SpAFQm_!!6000000007100-2-tps-2992-1528.png" /></p>
+</li>
+<li>
+<p>参数填写完成后可以看到对应询价明细，确认参数后点击<strong>下一步：确认订单</strong>。确认订单完成后同意服务协议并点击<strong>立即创建</strong>进入部署阶段。 </p>
+</li>
+<li>等待部署完成后进入服务实例管理, 在控制台找到RAGFlow服务访问链接。
+  <img alt="image.png" src="https://img.alicdn.com/imgextra/i2/O1CN01yDxcAx1SqzdjZuqCU_!!6000000002299-2-tps-2992-1524.png" /></li>
+<li>单击链接访问服务。
+  <img alt="image.png" src="https://img.alicdn.com/imgextra/i2/O1CN01qBGTSx1ztdF2olWlD_!!6000000006772-0-tps-2878-1550.jpg" /></li>
+</ol>
+<h2 id="_4">常见问题</h2>
+<ol>
+<li>使用通义千问API 报错API调用频率限制：
+  <img alt="image.png" src="https://img.alicdn.com/imgextra/i1/O1CN01TvqC6o1q6K3hN2e1p_!!6000000005446-2-tps-2564-822.png" />
+  解决方案：添加<a href="https://github.com/infiniflow/ragflow/blob/main/README_zh.md">Ragflow官方交流群</a>协商修改使用限制。</li>
+</ol>
+        
+      </div>
+
+      <div class="copyrights">© 2009-2022 Aliyun.com 版权所有</div>
+    </div>
+  </div>
+  
+  <!--
+  MkDocs version      : 1.6.1
+  Docs Build Date UTC : 2025-08-19 09:29:34.994974+00:00
+  -->
+</body>
+</html>
